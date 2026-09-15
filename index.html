@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viktor — Đạo diễn hình ảnh AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15130F;
+    --ink-2:#1C1A15;
+    --paper:#EDE6D8;
+    --paper-dim:#B9B2A2;
+    --amber:#C6783B;
+    --teal:#5C8B87;
+    --brick:#9C4A3C;
+    --rule:#3A362F;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{ scroll-behavior:smooth; scroll-snap-type:y proximity; }
+  body{
+    background:var(--ink); color:var(--paper);
+    font-family:'Inter', sans-serif; font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--amber); color:var(--ink); }
+
+  .reel{ max-width:1040px; margin:0 auto; padding-left:56px; position:relative; }
+  .reel::before{ content:""; position:absolute; left:14px; top:0; bottom:0; width:1px; background:var(--rule); }
+  .sprocket{ position:absolute; left:10px; width:9px; height:9px; border:1px solid var(--rule); border-radius:1px; background:var(--ink); }
+
+  header{ position:sticky; top:0; z-index:20; background:rgba(21,19,15,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--rule); transition:padding .25s ease; }
+  .nav-inner{ max-width:1040px; margin:0 auto; padding:20px 56px; display:flex; justify-content:space-between; align-items:center; transition:padding .25s ease; }
+  .logo{ font-family:'Newsreader', serif; font-size:20px; letter-spacing:0.02em; }
+  nav ul{ list-style:none; display:flex; gap:26px; }
+  nav a{ color:var(--paper-dim); text-decoration:none; font-size:14px; transition:color .15s ease; }
+  nav a:hover{ color:var(--amber); }
+  header.scrolled .nav-inner{ padding-top:12px; padding-bottom:12px; }
+
+  /* HERO / ABOUT */
+  .hero{ padding:120px 0 60px; will-change:transform, opacity; }
+  .hero-slate{ font-size:13px; color:var(--paper-dim); margin-bottom:22px; display:flex; align-items:center; gap:10px; }
+  .hero-slate .dot{ width:6px; height:6px; background:var(--amber); border-radius:50%; }
+  .hero-credential{ font-size:13.5px; color:var(--paper-dim); margin-bottom:20px; }
+  h1.hero-title{ font-family:'Newsreader', serif; font-weight:500; font-size:clamp(36px, 5vw, 60px); line-height:1.14; max-width:15ch; letter-spacing:-0.01em; }
+  .hero-title em{ font-style:italic; color:var(--amber); font-weight:500; }
+  .hero-sub{ margin-top:26px; max-width:52ch; color:var(--paper-dim); font-size:16.5px; }
+
+  .hero-flex{ display:flex; gap:48px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap-reverse; }
+  .hero-text{ flex:1 1 420px; }
+  .hero-portrait{ flex:0 0 220px; width:220px; aspect-ratio:2/3; border:1px solid var(--rule); overflow:hidden; opacity:0; transform:translateY(14px); animation:hero-in .7s cubic-bezier(.2,.7,.3,1) forwards; animation-delay:1.95s; }
+  .hero-portrait img{ width:100%; height:100%; object-fit:cover; display:block; }
+  @media (prefers-reduced-motion: reduce){ .hero-portrait{ opacity:1; transform:none; animation:none; } }
+
+  .about-grid{ margin-top:56px; padding-top:44px; border-top:1px solid var(--rule); display:grid; grid-template-columns:1fr 1fr; gap:48px; }
+  .about-col .col-label{ font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--teal); margin-bottom:16px; }
+  .about-col p{ color:var(--paper-dim); font-size:15px; max-width:44ch; }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-tags span{ border:1px solid var(--rule); padding:7px 13px; font-size:13px; color:var(--paper); }
+
+  .stat-line{ display:flex; align-items:baseline; gap:14px; margin-bottom:20px; }
+  .stat-num{ font-family:'Newsreader', serif; font-size:46px; color:var(--amber); line-height:1; }
+  .stat-label{ font-size:13px; color:var(--paper-dim); max-width:24ch; }
+
+  .skill-group{ margin-bottom:18px; }
+  .skill-group:last-child{ margin-bottom:0; }
+  .skill-group-label{ font-size:12px; color:var(--paper-dim); margin-bottom:8px; }
+
+  /* SECTION HEADERS */
+  .section-head{ padding:64px 0 32px; border-top:1px solid var(--rule); display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px; }
+  .section-head h2{ font-family:'Newsreader', serif; font-weight:500; font-size:32px; }
+  .section-head p{ color:var(--paper-dim); max-width:38ch; font-size:14.5px; }
+
+  /* AWARDS */
+  .award{ border-top:1px solid var(--rule); padding:44px 0; display:grid; grid-template-columns:64px 1fr; gap:24px; max-width:1040px; margin:0 auto; padding-left:56px; position:relative; }
+  .award:last-child{ border-bottom:1px solid var(--rule); }
+  .award-mark{ width:44px; height:44px; border:1px solid var(--amber); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Newsreader', serif; font-style:italic; color:var(--amber); font-size:14px; }
+  .award-body .org{ font-size:12.5px; color:var(--teal); margin-bottom:8px; }
+  .award-body h3{ font-family:'Newsreader', serif; font-weight:500; font-size:24px; margin-bottom:10px; }
+  .award-body p{ color:var(--paper-dim); font-size:15px; max-width:62ch; }
+
+  .tools{ margin-top:40px; padding-top:36px; border-top:1px solid var(--rule); display:flex; flex-wrap:wrap; gap:10px; }
+  .tools span{ font-size:13px; color:var(--paper); border:1px solid var(--rule); padding:7px 13px; }
+
+  /* CONTACT */
+  footer{ border-top:1px solid var(--rule); padding:80px 0 60px; }
+  footer h2{ font-family:'Newsreader', serif; font-weight:500; font-size:clamp(30px, 4vw, 44px); max-width:16ch; margin-bottom:24px; }
+  .contact-line{ display:flex; flex-wrap:wrap; gap:28px; margin-top:20px; }
+  .contact-line a{ color:var(--paper); text-decoration:none; border-bottom:1px solid var(--amber); padding-bottom:2px; font-size:15px; }
+  .contact-line a:hover{ color:var(--amber); }
+  .foot-note{ margin-top:60px; font-size:12.5px; color:var(--rule); }
+
+  /* ---- MAGAZINE PROJECT PAGES ---- */
+  .magazine{ border-top:1px solid var(--rule); }
+  .project-page{
+    min-height:100svh; padding:72px 56px 90px; max-width:1040px; margin:0 auto;
+    border-bottom:1px solid var(--rule);
+    scroll-snap-align:start; scroll-margin-top:0;
+    display:flex; flex-direction:column; gap:26px; justify-content:center;
+  }
+  .proj-meta{ font-size:13px; color:var(--paper-dim); display:flex; gap:10px; align-items:center; }
+  .proj-poster{
+    position:relative; height:42vh; min-height:260px; border-radius:2px; overflow:hidden;
+    display:flex; align-items:flex-end; padding:32px;
+  }
+  .poster-title{ font-family:'Newsreader', serif; font-size:clamp(30px, 4.6vw, 52px); line-height:1.05; }
+  .poster-style{ display:block; margin-top:8px; font-size:13px; color:rgba(237,230,216,0.75); }
+  .proj-intro{ max-width:64ch; color:var(--paper-dim); font-size:15.5px; }
+  .proj-label{ font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--teal); margin-bottom:12px; }
+  .proj-gallery{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; }
+  .ph-image{
+    aspect-ratio:4/3; border:1px dashed var(--rule); border-radius:2px;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-size:12px; color:var(--paper-dim); padding:10px;
+    background:repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 10px, transparent 10px 22px);
+  }
+  .proj-videos{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; }
+  .ph-video{
+    aspect-ratio:16/9; border:1px solid var(--rule); border-radius:2px; position:relative;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+    background:var(--ink-2); cursor:pointer;
+  }
+  .ph-video .play{
+    width:44px; height:44px; border:1px solid var(--accent, var(--amber)); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; color:var(--accent, var(--amber)); font-size:13px;
+  }
+  .ph-video .vlabel{ font-size:12px; color:var(--paper-dim); }
+
+  /* ---- VIDEO POSTER ---- */
+  .poster-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+  .poster-overlay{ position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(23,20,15,0.05) 40%, rgba(23,20,15,0.9) 100%); }
+  .poster-text{ position:relative; z-index:2; }
+
+  /* ---- REAL VIDEO EMBED ---- */
+  .video-embed{ aspect-ratio:16/9; border:1px solid var(--rule); border-radius:2px; overflow:hidden; background:var(--ink-2); }
+  .video-embed video, .video-embed iframe{ width:100%; height:100%; object-fit:cover; display:block; border:0; }
+  .proj-videos.portrait .video-embed{ aspect-ratio:9/16; }
+  .proj-videos.portrait{ grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); }
+  .vcaption{ font-size:12px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  /* ---- EPISODE POSTER CARDS (TikTok) ---- */
+  .ep-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; }
+  .ep-card{ display:block; aspect-ratio:9/16; border-radius:2px; overflow:hidden; border:1px solid var(--rule); }
+  .ep-card img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
+  .ep-card:hover img{ transform:scale(1.04); }
+  .tiktok-link, .social-link{ display:inline-flex; align-items:center; gap:8px; margin-top:16px; color:var(--paper); border-bottom:1px solid var(--accent, var(--amber)); padding-bottom:2px; font-size:14px; text-decoration:none; }
+  .tiktok-link:hover, .social-link:hover{ color:var(--accent, var(--amber)); }
+
+  /* ---- REAL GALLERY IMAGE ---- */
+  .ph-image-real{ aspect-ratio:4/3; border:1px solid var(--rule); overflow:hidden; background:#EDE6D8; display:flex; align-items:center; justify-content:center; }
+  .ph-image-real img{ width:100%; height:100%; object-fit:contain; display:block; }
+
+  /* per-project themes — grounded in each project's real visual style */
+  .theme-conflux{ --accent:#C6783B; }
+  .theme-conflux .proj-poster{ background:radial-gradient(ellipse at 25% 100%, rgba(198,120,59,0.38), transparent 62%), #17140F; border-top:2px solid var(--rule); border-bottom:2px solid var(--rule); }
+  .theme-conflux .poster-title{ font-style:italic; letter-spacing:-0.01em; }
+
+  .theme-rampart{ --accent:#8B6FB3; }
+  .theme-rampart .proj-poster{ background:radial-gradient(circle at 18% 20%, rgba(92,139,135,0.42), transparent 55%), radial-gradient(circle at 82% 82%, rgba(139,111,179,0.36), transparent 55%), #17140F; }
+  .theme-rampart .poster-title{ letter-spacing:0.02em; }
+
+  .theme-fpt{ --accent:#4C7EA8; }
+  .theme-fpt .proj-poster{
+    background-image:linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(160deg, #1B2530, #0F151C);
+    background-size:28px 28px, 28px 28px, cover;
+  }
+  .theme-fpt .poster-title{ font-family:'Inter', sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; font-size:clamp(24px, 3.6vw, 38px); }
+
+  .theme-khupho{ --accent:#C6783B; }
+  .theme-khupho .proj-poster{ background:radial-gradient(circle at 72% 38%, rgba(198,120,59,0.32), transparent 55%), #211F1A; }
+  .theme-khupho .poster-title{ font-style:italic; }
+
+  .theme-balan{ --accent:#B4553F; }
+  .theme-balan .proj-poster{ background:linear-gradient(155deg, #EDE6D8, #E1D5BE); }
+  .theme-balan .poster-title{ color:#1C1A15; font-family:'Inter', sans-serif; font-weight:600; }
+  .theme-balan .poster-style{ color:#5C5748; }
+  .theme-balan .ph-image, .theme-balan .ph-video{ border-color:#C9BFA8; }
+  .theme-balan .ph-video{ background:#E8DFCC; }
+
+  .theme-home{ --accent:#C6783B; }
+  .theme-home .proj-poster{ background:radial-gradient(circle at 50% 32%, rgba(198,120,59,0.3), transparent 55%), #0E0D0A; }
+  .theme-home .poster-title{ font-style:italic; font-size:clamp(26px, 4vw, 46px); }
+
+  .proj-tags{ margin-top:4px; display:flex; flex-wrap:wrap; gap:8px; }
+  .proj-tags span{ font-size:12px; color:var(--paper-dim); border:1px solid var(--rule); padding:4px 10px; }
+
+  /* right-side page dots */
+  .proj-dots{ position:fixed; right:26px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:12px; z-index:15; }
+  .proj-dots a{ width:6px; height:6px; border:1px solid var(--paper-dim); border-radius:50%; display:block; transition:all .25s ease; }
+  .proj-dots a.active{ background:var(--amber); border-color:var(--amber); transform:scale(1.5); }
+
+  @media (max-width:900px){ .proj-dots{ display:none; } }
+  @media (max-width:760px){
+    .about-grid{ grid-template-columns:1fr; gap:32px; }
+    .proj-gallery{ grid-template-columns:repeat(2, 1fr); }
+    .proj-videos{ grid-template-columns:1fr; }
+  }
+  @media (max-width:640px){
+    .reel{ padding-left:34px; }
+    .reel::before{ left:8px; }
+    .sprocket{ left:4.5px; }
+    .nav-inner{ padding:16px 20px; }
+    header nav{ display:none; }
+    .hero{ padding:80px 0 40px; }
+    .award{ grid-template-columns:1fr; gap:8px; padding-left:34px; }
+    .project-page{ padding:56px 24px 70px; }
+  }
+
+  /* ---- FILM LEADER INTRO ---- */
+  .leader{ position:fixed; inset:0; z-index:100; background:var(--ink); display:flex; align-items:center; justify-content:center; animation:leader-out .6s ease forwards; animation-delay:1.5s; }
+  .leader-circle{ width:120px; height:120px; border-radius:50%; border:1px solid var(--rule); display:flex; align-items:center; justify-content:center; position:relative; }
+  .leader-circle::before{ content:""; position:absolute; inset:-1px; border-radius:50%; border:1px solid var(--amber); clip-path:polygon(50% 50%, 50% 0, 50% 0); animation:leader-sweep 1.5s linear forwards; }
+  .leader-num{ font-family:'Newsreader', serif; font-style:italic; font-size:36px; color:var(--paper); }
+  @keyframes leader-sweep{ 0%{ clip-path:polygon(50% 50%, 50% 0, 50% 0); } 100%{ clip-path:polygon(50% 50%, 50% 0, 50% 0, 0 0, 0 100%, 100% 100%, 100% 0, 50% 0); } }
+  @keyframes leader-out{ to{ opacity:0; visibility:hidden; } }
+  @media (prefers-reduced-motion: reduce){ .leader{ display:none; } }
+
+  /* ---- AMBIENT GRAIN ---- */
+  .grain{ position:fixed; inset:0; pointer-events:none; z-index:5; background-image:radial-gradient(circle at 50% 0%, rgba(198,120,59,0.06), transparent 60%); mix-blend-mode:overlay; animation:flicker 6s ease-in-out infinite; }
+  @keyframes flicker{ 0%, 100%{ opacity:0.7; } 45%{ opacity:1; } 50%{ opacity:0.55; } 78%{ opacity:0.9; } }
+  @media (prefers-reduced-motion: reduce){ .grain{ animation:none; } }
+
+  /* ---- HERO ENTRANCE ---- */
+  .hero-slate, .hero-title, .hero-sub, .hero-credential{ opacity:0; transform:translateY(14px); animation:hero-in .7s cubic-bezier(.2,.7,.3,1) forwards; }
+  .hero-slate{ animation-delay:1.7s; }
+  .hero-credential{ animation-delay:1.78s; }
+  .hero-title{ animation-delay:1.85s; }
+  .hero-sub{ animation-delay:2.05s; }
+  @keyframes hero-in{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .hero-slate, .hero-title, .hero-sub, .hero-credential{ opacity:1; transform:none; animation:none; } }
+
+  /* ---- SCROLL REVEAL ---- */
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  .section-head.reveal{ transform:translateX(-16px); }
+  .section-head.reveal.in-view{ transform:translateX(0); }
+  .project-page.reveal{ transform:translateY(30px); }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+  /* ---- SCROLL PROGRESS ---- */
+  .scroll-progress{ position:fixed; top:0; left:0; height:2px; width:0%; background:var(--amber); z-index:101; }
+</style>
+</head>
+<body>
+
+<div class="leader" id="leader">
+  <div class="leader-circle"><span class="leader-num" id="leaderNum">3</span></div>
+</div>
+<div class="grain"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<nav class="proj-dots" id="projDots">
+  <a href="#proj-conflux" data-target="proj-conflux" title="Conflux"></a>
+  <a href="#proj-rampart" data-target="proj-rampart" title="Rampart"></a>
+  <a href="#proj-fpt" data-target="proj-fpt" title="1K Challenge"></a>
+  <a href="#proj-khupho" data-target="proj-khupho" title="Khu Phố Biết Thương"></a>
+  <a href="#proj-balan" data-target="proj-balan" title="Bà Lan Công Nghệ"></a>
+  <a href="#proj-home" data-target="proj-home" title="Home"></a>
+</nav>
+
+<header id="siteHeader">
+  <div class="nav-inner">
+    <div class="logo">Viktor</div>
+    <nav>
+      <ul>
+        <li><a href="#about">Giới thiệu</a></li>
+        <li><a href="#work">Dự án</a></li>
+        <li><a href="#awards">Giải thưởng</a></li>
+        <li><a href="#contact">Liên hệ</a></li>
+        <li><a href="cv.html">CV (in)</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="reel" id="reel-track"></div>
+
+<!-- 1. GIỚI THIỆU -->
+<section id="about" class="hero reel">
+  <div class="hero-flex">
+    <div class="hero-text">
+      <div class="hero-slate"><span class="dot"></span> ĐẠO DIỄN HÌNH ẢNH — VIỆT NAM</div>
+      <div class="hero-credential">Thủ khoa Sân khấu Điện ảnh Hà Nội, 2015 — Lead Media, FPT Telecom</div>
+      <h1 class="hero-title">Kể chuyện bằng hình ảnh, đem đến những thế giới trong <em>giấc mơ</em>.</h1>
+      <p class="hero-sub">Xuất phát điểm là một đạo diễn điện ảnh, tôi luôn mong muốn tạo ra những thước phim và thế giới của riêng mình mà không cần đến một ekip hùng hậu. Vì thế tôi tìm đến AI để thả hồn vào những sản phẩm của mình. Tôi đã làm nhiều thể loại, và mỗi sản phẩm đều mang một chất điện ảnh riêng.</p>
+    </div>
+    <div class="hero-portrait"><img src="images/viktor-portrait.png" alt="Viktor"></div>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-col reveal">
+      <div class="col-label">Học vấn &amp; Kinh nghiệm</div>
+      <div class="stat-line"><span class="stat-num">15+</span><span class="stat-label">năm kinh nghiệm sản xuất phim, phim ngắn, TVC, Corporate, Social</span></div>
+      <p>Thủ khoa Sân khấu Điện ảnh Hà Nội, niên khóa 2011–2015. Từng sản xuất đa dạng thể loại nội dung, xây dựng kênh TikTok, trước khi chuyển hướng làm phim bằng AI. Hiện là Lead Media, Ban Truyền thông &amp; Marketing, FPT Telecom.</p>
+    </div>
+    <div class="about-col reveal">
+      <div class="col-label">Kỹ năng</div>
+      <div class="skill-group">
+        <div class="skill-group-label">Sáng tạo &amp; đạo diễn</div>
+        <div class="skill-tags">
+          <span>Lên ý tưởng &amp; viết kịch bản</span>
+          <span>Đạo diễn hình ảnh</span>
+          <span>Editing chuyên nghiệp</span>
+          <span>Thiết kế hình ảnh, Visual</span>
+          <span>Prompt engineering</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">Phần mềm hậu kỳ</div>
+        <div class="skill-tags">
+          <span>CapCut</span><span>Adobe Premiere</span><span>After Effects</span>
+          <span>Illustrator</span><span>Photoshop</span><span>Canva</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">Công cụ AI</div>
+        <div class="skill-tags">
+          <span>Google Flow</span><span>Seedance</span><span>Claude</span><span>ChatGPT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. DỰ ÁN — dạng tạp chí, mỗi cuộn 1 trang -->
+<div id="work">
+  <div class="reel">
+    <div class="section-head reveal">
+      <h2>Dự án</h2>
+      <p>Cuộn xuống để lần lượt bước qua từng dự án — mỗi dự án mang một style hình ảnh riêng.</p>
+    </div>
+  </div>
+
+  <div class="magazine">
+
+    <!-- Thay các khối .ph-image / .ph-video bằng <img src="..."> hoặc <video>/<iframe> khi có file thật -->
+
+    <article class="project-page reveal theme-conflux" id="proj-conflux">
+      <div class="proj-meta">01 / 06 — Vũ trụ Vaeloria</div>
+      <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(23,20,15,0.05) 40%, rgba(23,20,15,0.9) 100%), url('images/conflux-poster.png'); background-size:cover; background-position:center 30%;">
+        <div>
+          <span class="poster-title">Conflux</span>
+          <span class="poster-style">Hyperrealistic live-action — thẩm mỹ ARRI Alexa</span>
+        </div>
+      </div>
+      <p class="proj-intro">Series giả tưởng live-action lấy bối cảnh vũ trụ Vaeloria, thẩm mỹ điện ảnh chân thực được khóa cứng để tách biệt hoàn toàn khỏi hệ hội họa của Rampart. Hai nhân vật chính Lacus và Fiur, cùng Ignissa — một Fire Elemental "Planeswalker" mới xuất hiện. Sáu tập đã lên kịch bản; tập 6 giới thiệu sinh vật đồng hành Finn.</p>
+      <div class="proj-tags"><span>Veo3</span><span>Seedance</span><span>Character &amp; Location DNA</span></div>
+      <div>
+        <div class="proj-label">Hình ảnh thiết kế</div>
+        <div class="proj-gallery">
+          <div><div class="ph-image-real"><img src="images/conflux-lacus.png" alt="DNA nhân vật — Lacus"></div><div class="vcaption">DNA nhân vật — Lacus</div></div>
+          <div><div class="ph-image-real"><img src="images/conflux-fiur.png" alt="DNA nhân vật — Fiur"></div><div class="vcaption">DNA nhân vật — Fiur</div></div>
+          <div><div class="ph-image-real"><img src="images/conflux-finn.png" alt="DNA sinh vật — Finn"></div><div class="vcaption">DNA sinh vật — Finn</div></div>
+          <figure class="ph-image"><span>Thiết kế Ignissa — Fire Elemental</span></figure>
+        </div>
+      </div>
+      <div>
+        <div class="proj-label">Video</div>
+        <div class="proj-videos">
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/hD3ZV-r3nzQ" title="Conflux — Tập 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Tập 1</div></div>
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/lunWBBgQxu8" title="Conflux — Tập 4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Tập 4</div></div>
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/CwL24ztg2eQ" title="Conflux — Tập 6" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Tập 6 — Finn xuất hiện</div></div>
+        </div>
+        <a class="social-link" href="https://www.instagram.com/viktor.ai.director/" target="_blank" rel="noopener">Xem thêm trên Instagram →</a>
+      </div>
+    </article>
+
+    <article class="project-page reveal theme-rampart" id="proj-rampart">
+      <div class="proj-meta">02 / 06 — Vũ trụ Vaeloria</div>
+      <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(23,20,15,0.05) 40%, rgba(23,20,15,0.92) 100%), url('images/rampart-poster.png'); background-size:cover; background-position:center 25%;">
+        <div>
+          <span class="poster-title">The Legend of Vaeloria: Rampart</span>
+          <span class="poster-style">Painterly — phong cách Arcane / Fortiche</span>
+        </div>
+      </div>
+      <p class="proj-intro">Series nhiều mùa lấy cảm hứng từ Heroes of Might and Magic III. Thế giới quan được xây dựng cho chín phe phái, hồ sơ DNA chi tiết cho hơn mười nhân vật, cùng shotlist chín cảnh cho trailer — song song với tài liệu theo dõi sản xuất và vật liệu quảng bá riêng.</p>
+      <div class="proj-tags"><span>9 phe phái</span><span>10+ nhân vật</span><span>Trailer shotlist</span></div>
+      <div>
+        <div class="proj-label">Hình ảnh thiết kế</div>
+        <div class="proj-gallery">
+          <div><div class="ph-image-real"><img src="images/rampart-vidomia.png" alt="DNA nhân vật — Vidomia"></div><div class="vcaption">DNA nhân vật — Vidomia</div></div>
+          <div><div class="ph-image-real"><img src="images/rampart-aeris.png" alt="DNA nhân vật — Aeris"></div><div class="vcaption">DNA nhân vật — Aeris</div></div>
+          <div><div class="ph-image-real"><img src="images/rampart-elyria.png" alt="DNA nhân vật — Elyria"></div><div class="vcaption">DNA nhân vật — Elyria</div></div>
+          <div><div class="ph-image-real"><img src="images/rampart-mephala.png" alt="DNA nhân vật — Mephala"></div><div class="vcaption">DNA nhân vật — Mephala</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="proj-label">Video</div>
+        <div class="proj-videos">
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/E9eoT8mleb0" title="Rampart — Teaser" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Teaser — Rampart</div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-page reveal theme-fpt" id="proj-fpt">
+      <div class="proj-meta">03 / 06 — FPT &amp; Thương hiệu</div>
+      <div class="proj-poster">
+        <div>
+          <span class="poster-title">FPT — 1K Challenge</span>
+          <span class="poster-style">Series quảng bá — nhiều kịch bản, nhiều dàn nhân vật</span>
+        </div>
+      </div>
+      <p class="proj-intro">Pipeline sản xuất đầy đủ cho một series quảng bá dài hơi: mỗi kịch bản là một dàn nhân vật và giọng vùng miền riêng, với các quy tắc hình ảnh nghiêm ngặt — từ cách thể hiện tờ tiền đúng màu nhưng làm mờ chi tiết, phục trang lặp lại xuyên suốt, đến quy tắc 180 độ được giữ nhất quán qua từng shot. Sáu kịch bản đã và đang được triển khai.</p>
+      <div class="proj-tags"><span>Google Flow</span><span>Seedance</span><span>Veo3</span><span>Excel tracking</span></div>
+      <div>
+        <div class="proj-label">Hình ảnh thiết kế</div>
+        <div class="proj-gallery">
+          <figure class="ph-image"><span>Dàn nhân vật — Kịch bản 01</span></figure>
+          <figure class="ph-image"><span>Bảng màu tờ tiền &amp; phục trang</span></figure>
+          <figure class="ph-image"><span>Storyboard — quy tắc 180°</span></figure>
+        </div>
+      </div>
+      <div>
+        <div class="proj-label">Video</div>
+        <div class="proj-videos portrait">
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/LeIhLwCHMjU" title="1K Challenge — Hãy chọn giá đúng" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Hãy chọn giá đúng — Làm gì với 1K?</div></div>
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/DBZsrFjDyVw" title="1K Challenge — Mua được gì với 1K" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Mua được gì với 1K?</div></div>
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/GTbatFsgoq8" title="1K Challenge — Tìm 1.000 đồng bị mất" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Anh bạn lùng sục tìm 1.000 đồng bị mất và cái kết</div></div>
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/EvLY2CHYx7g" title="1K Challenge — Không khí sân vận động" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Chỉ 1K — đem không khí sân vận động về nhà</div></div>
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/HPg4WhLKwwo" title="1K Challenge — Khoảnh khắc không thể bỏ lỡ" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Có những khoảnh khắc không thể bỏ lỡ</div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-page reveal theme-khupho" id="proj-khupho">
+      <div class="proj-meta">04 / 06 — FPT &amp; Thương hiệu</div>
+      <div class="proj-poster">
+        <video class="poster-video" autoplay muted loop playsinline>
+          <source src="images/khupho-poster.mp4" type="video/mp4">
+        </video>
+        <div class="poster-overlay"></div>
+        <div class="poster-text">
+          <span class="poster-title">Khu Phố Biết Thương</span>
+          <span class="poster-style">Phim ngắn thương hiệu — bối cảnh đô thị Hà Nội</span>
+        </div>
+      </div>
+      <p class="proj-intro">Phim ngắn thương hiệu cho FPT, lấy bối cảnh một khu phố đô thị Hà Nội. Một hệ thống nhân vật lớn được xây dựng riêng cho không gian này, cùng bản sắc hình ảnh đô thị miền Bắc hiện đại được cố định xuyên suốt phim.</p>
+      <div class="proj-tags"><span>Hà Nội</span><span>Hệ thống nhân vật lớn</span></div>
+      <div>
+        <div class="proj-label">Hình ảnh thiết kế</div>
+        <div class="proj-gallery">
+          <figure class="ph-image"><span>Hệ thống nhân vật khu phố</span></figure>
+          <figure class="ph-image"><span>Bản sắc đô thị Hà Nội</span></figure>
+        </div>
+      </div>
+      <div>
+        <div class="proj-label">Video</div>
+        <div class="proj-videos">
+          <div>
+            <div class="video-embed"><iframe src="https://www.youtube.com/embed/WsyLKGItfNs" title="Khu Phố Biết Thương — Bản chính thức" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+            <div class="vcaption">Bản chính thức</div>
+          </div>
+          <div>
+            <div class="video-embed"><iframe src="https://www.youtube.com/embed/f2TB4xRSKHo" title="Khu Phố Biết Thương — Ver 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+            <div class="vcaption">Bản dựng — Ver 3</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-page reveal theme-balan" id="proj-balan">
+      <div class="proj-meta">05 / 06 — Tác động xã hội</div>
+      <div class="proj-poster">
+        <div>
+          <span class="poster-title">Bà Lan Công Nghệ</span>
+          <span class="poster-style">Hoạt hình 3D phong cách Pixar — series TikTok</span>
+        </div>
+      </div>
+      <p class="proj-intro">Series hoạt hình gia đình Việt xoay quanh cảnh giác lừa đảo công nghệ, với năm nhân vật cố định và kế hoạch nội dung theo từng Arc. Arc 3 "AI Hơn AI" kể chuyện lừa đảo du lịch dịp Quốc khánh; Arc 4 "Nỗi Oan Bé Tý" kể một đứa trẻ bị oan vì phương thức thanh toán đã lưu sẵn và thiếu kiểm soát chi tiêu phụ huynh.</p>
+      <div class="proj-tags"><span>5 nhân vật</span><span>Arc 1–4</span><span>Veo3 text-only "LOCK format"</span></div>
+      <div>
+        <div class="proj-label">Poster các tập</div>
+        <div class="ep-grid">
+          <a class="ep-card" href="https://www.tiktok.com/@lan.cng.ngh" target="_blank" rel="noopener"><img src="images/balan-50trieu.png" alt="50 Triệu Biến Mất? — Tập 1"></a>
+          <a class="ep-card" href="https://www.tiktok.com/@lan.cng.ngh" target="_blank" rel="noopener"><img src="images/balan-trungthu.png" alt="Trung Thu Bất Ổn — Tập 1"></a>
+          <a class="ep-card" href="https://www.tiktok.com/@lan.cng.ngh" target="_blank" rel="noopener"><img src="images/balan-cuocgoi.png" alt="Cuộc Gọi Giả Danh? — Tập 1"></a>
+        </div>
+        <a class="tiktok-link" href="https://www.tiktok.com/@lan.cng.ngh" target="_blank" rel="noopener">Xem series trên TikTok →</a>
+      </div>
+    </article>
+
+    <article class="project-page reveal theme-home" id="proj-home">
+      <div class="proj-meta">06 / 06 — Phim cá nhân</div>
+      <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(14,13,10,0.1) 35%, rgba(14,13,10,0.92) 100%), url('images/home-poster.jpg'); background-size:cover; background-position:center 30%;">
+        <div>
+          <span class="poster-title">Home</span>
+          <span class="poster-style">Hoạt hình 3D phong cách hội họa ấn tượng — VIETFILM AI LAB</span>
+        </div>
+      </div>
+      <p class="proj-intro">Phim ngắn hoạt hình 3D theo phong cách hội họa ấn tượng, dự thi VIETFILM AI LAB. Được xây dựng với một visual bible trọn vẹn và cấu trúc prompt bảy phần cho từng shot, đảm bảo mạch hình ảnh nhất quán xuyên suốt phim.</p>
+      <div class="proj-tags"><span>7-part prompt structure</span><span>Visual bible</span><span>VIETFILM AI LAB</span></div>
+      <div>
+        <div class="proj-label">Hình ảnh thiết kế</div>
+        <div class="proj-gallery">
+          <figure class="ph-image"><span>Visual bible — Home</span></figure>
+          <figure class="ph-image"><span>Cấu trúc prompt 7 phần / shot</span></figure>
+        </div>
+      </div>
+      <div>
+        <div class="proj-label">Video</div>
+        <div class="proj-videos">
+          <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/3fHAW7FrtPc" title="Home — phim dự thi" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Home — phim dự thi</div></div>
+        </div>
+        <a class="social-link" href="https://www.instagram.com/viktor.tran_ai/" target="_blank" rel="noopener">Xem thêm trên Instagram →</a>
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<!-- 3. GIẢI THƯỞNG -->
+<section id="awards" class="reel">
+  <div class="section-head reveal">
+    <h2>Giải thưởng</h2>
+    <p>Ghi nhận từ cộng đồng làm phim AI.</p>
+  </div>
+</section>
+<div class="award reveal">
+  <div class="award-mark">★</div>
+  <div class="award-body">
+    <div class="org">VIETFILM AI LAB × CapCut</div>
+    <h3>Top 16 Creator xuất sắc nhất</h3>
+    <p>Được vinh danh trong Top 16 Creator xuất sắc nhất tại cuộc thi làm phim bằng AI do VIETFILM AI LAB phối hợp cùng CapCut tổ chức — trong khuôn khổ cuộc thi mà hai tác phẩm <em style="font-style:italic">Home</em> và <em style="font-style:italic">Suất Chiếu Cuối Cùng</em> tham gia dự thi.</p>
+  </div>
+</div>
+
+<!-- 4. LIÊN HỆ -->
+<footer id="contact" class="reel">
+  <h2>Quan tâm hợp tác trong một dự án?</h2>
+  <div class="contact-line">
+    <a href="mailto:hello@yourdomain.com">hello@yourdomain.com</a>
+    <a href="https://www.instagram.com/viktor.ai.director/" target="_blank" rel="noopener">Instagram</a>
+    <a href="#">TikTok</a>
+  </div>
+  <div class="foot-note">Viktor — Đạo diễn hình ảnh &amp; AI video creator, Việt Nam.</div>
+</footer>
+
+<script>
+  // sprocket holes along the rail
+  const track = document.getElementById('reel-track');
+  const step = 46;
+  function buildSprockets(){
+    track.innerHTML = '';
+    const t = document.body.scrollHeight;
+    for(let y = 40; y < t; y += step){
+      const s = document.createElement('div');
+      s.className = 'sprocket';
+      s.style.top = y + 'px';
+      track.appendChild(s);
+    }
+  }
+  buildSprockets();
+  window.addEventListener('resize', buildSprockets);
+  window.addEventListener('load', buildSprockets);
+
+  // film-leader countdown
+  const leaderNum = document.getElementById('leaderNum');
+  const counts = ['3','2','1'];
+  let ci = 0;
+  const leaderTimer = setInterval(() => {
+    ci++;
+    if(ci < counts.length){ leaderNum.textContent = counts[ci]; }
+    else { clearInterval(leaderTimer); }
+  }, 480);
+  setTimeout(() => {
+    document.getElementById('leader').style.display = 'none';
+  }, 2200);
+
+  // header shrink + scroll progress + hero parallax
+  const header = document.getElementById('siteHeader');
+  const progress = document.getElementById('scrollProgress');
+  const heroEl = document.querySelector('.hero');
+  const docHeight = () => document.body.scrollHeight - window.innerHeight;
+  function onScroll(){
+    const y = window.scrollY;
+    header.classList.toggle('scrolled', y > 40);
+    const pct = docHeight() > 0 ? (y / docHeight()) * 100 : 0;
+    progress.style.width = pct + '%';
+    const fade = Math.max(0, 1 - y / 500);
+    heroEl.style.transform = 'translateY(' + (y * 0.12) + 'px)';
+    heroEl.style.opacity = fade;
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold:0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // project page dots — highlight current page
+  const dots = document.querySelectorAll('.proj-dots a');
+  const pages = document.querySelectorAll('.project-page');
+  const dotObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const dot = document.querySelector('.proj-dots a[data-target="' + entry.target.id + '"]');
+      if(dot) dot.classList.toggle('active', entry.isIntersecting);
+    });
+  }, { threshold:0.5 });
+  pages.forEach(p => dotObserver.observe(p));
+</script>
+
+</body>
+</html>

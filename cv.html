@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viktor — CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15130F;
+    --ink-2:#1C1A15;
+    --paper:#EDE6D8;
+    --paper-dim:#B9B2A2;
+    --amber:#C6783B;
+    --teal:#5C8B87;
+    --rule:#3A362F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--ink); color:var(--paper);
+    font-family:'Inter', sans-serif; font-size:15.5px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--amber); color:var(--ink); }
+
+  .page{
+    max-width:980px; margin:0 auto;
+    display:grid;
+    grid-template-columns:300px 1fr;
+    min-height:100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar{
+    border-right:1px solid var(--rule);
+    padding:56px 36px;
+    position:sticky; top:0; align-self:start; height:100vh;
+    overflow-y:auto;
+  }
+  .avatar{
+    width:96px; height:96px;
+    border:1px solid var(--rule);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Newsreader', serif; font-size:34px; color:var(--amber);
+    margin-bottom:24px;
+    overflow:hidden;
+  }
+  .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .sidebar h1{
+    font-family:'Newsreader', serif; font-weight:500; font-size:28px;
+  }
+  .role{
+    color:var(--teal); font-size:14px; margin-top:6px; margin-bottom:22px;
+  }
+  .bio{ color:var(--paper-dim); font-size:14px; margin-bottom:34px; }
+
+  .side-block{ margin-bottom:34px; }
+  .side-label{
+    font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--paper-dim); margin-bottom:12px;
+  }
+  .contact-list{ list-style:none; }
+  .contact-list li{ margin-bottom:8px; }
+  .contact-list a{ color:var(--paper); text-decoration:none; font-size:14px; border-bottom:1px solid transparent; }
+  .contact-list a:hover{ border-color:var(--amber); color:var(--amber); }
+
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:7px; }
+  .skill-tags span{
+    font-size:12px; border:1px solid var(--rule); padding:5px 10px; color:var(--paper-dim);
+  }
+
+  .print-btn{
+    margin-top:10px;
+    background:none; border:1px solid var(--rule); color:var(--paper-dim);
+    font-family:'Inter'; font-size:13px; padding:9px 14px; cursor:pointer;
+  }
+  .print-btn:hover{ color:var(--amber); border-color:var(--amber); }
+
+  /* MAIN */
+  main{ padding:56px 48px 100px; }
+
+  .msection{ margin-bottom:52px; }
+  .msection > .mlabel{
+    font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:20px;
+  }
+
+  .entry{
+    border-top:1px solid var(--rule);
+    padding:22px 0;
+    display:grid; grid-template-columns:150px 1fr; gap:20px;
+  }
+  .entry:last-child{ border-bottom:1px solid var(--rule); }
+  .entry-status{ font-size:12.5px; color:var(--paper-dim); padding-top:2px; }
+  .entry-status .badge{
+    display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:var(--amber); margin-right:7px;
+  }
+  .entry-status.done .badge{ background:var(--teal); }
+  .entry-body h3{
+    font-family:'Newsreader', serif; font-weight:500; font-size:19px; margin-bottom:4px;
+  }
+  .entry-client{ font-size:13px; color:var(--amber); margin-bottom:10px; }
+  .entry-body p{ color:var(--paper-dim); font-size:14.5px; max-width:62ch; }
+
+  .rec-entry{
+    border-top:1px solid var(--rule);
+    padding:20px 0;
+    display:grid; grid-template-columns:150px 1fr; gap:20px;
+  }
+  .rec-entry:last-child{ border-bottom:1px solid var(--rule); }
+  .rec-entry .rlabel{ font-size:12.5px; color:var(--paper-dim); }
+  .rec-entry h3{ font-family:'Newsreader', serif; font-weight:500; font-size:17px; margin-bottom:4px; }
+  .rec-entry p{ color:var(--paper-dim); font-size:14px; }
+
+  .tool-grid{ display:flex; flex-wrap:wrap; gap:9px; }
+  .tool-grid span{ font-size:13px; border:1px solid var(--rule); padding:7px 13px; }
+
+  @media (max-width:760px){
+    .page{ grid-template-columns:1fr; }
+    .sidebar{ position:static; height:auto; border-right:none; border-bottom:1px solid var(--rule); }
+    .entry, .rec-entry{ grid-template-columns:1fr; gap:6px; }
+    main{ padding:40px 24px 80px; }
+  }
+
+  @media print{
+    body{ background:#fff; color:#111; }
+    .print-btn{ display:none; }
+    .sidebar{ position:static; height:auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <aside class="sidebar">
+    <div class="avatar"><img src="images/viktor-portrait.png" alt="Viktor"></div>
+    <h1>Viktor</h1>
+    <div class="role">Đạo diễn hình ảnh &amp; AI video creator</div>
+    <p class="bio">Làm phim bằng AI tại Việt Nam — từ sử thi giả tưởng nhiều tập đến phim thương hiệu và series mạng xã hội. Chuyên sâu về character &amp; style DNA, prompt engineering và quy trình sản xuất video AI có hệ thống.</p>
+
+    <div class="side-block">
+      <div class="side-label">Liên hệ</div>
+      <ul class="contact-list">
+        <li><a href="mailto:hello@yourdomain.com">hello@yourdomain.com</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+      </ul>
+    </div>
+
+    <div class="side-block">
+      <div class="side-label">Kỹ năng</div>
+      <div class="skill-tags">
+        <span>Prompt engineering</span>
+        <span>Character &amp; style DNA</span>
+        <span>Photo-to-JSON analysis</span>
+        <span>Chỉ đạo giọng vùng miền</span>
+        <span>After Effects</span>
+        <span>Sản xuất có hệ thống</span>
+      </div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-label">Xem thêm</div>
+      <ul class="contact-list">
+        <li><a href="index.html">Xem portfolio đầy đủ →</a></li>
+      </ul>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">In / Lưu PDF</button>
+  </aside>
+
+  <main>
+
+    <section class="msection">
+      <div class="mlabel">Tác phẩm &amp; dự án</div>
+
+      <div class="entry">
+        <div class="entry-status"><span class="badge"></span>Đang sản xuất</div>
+        <div class="entry-body">
+          <h3>Conflux</h3>
+          <div class="entry-client">Vũ trụ Vaeloria — live-action</div>
+          <p>Series giả tưởng hyperrealistic, thẩm mỹ ARRI Alexa. 6 tập đã lên kịch bản, nhân vật Lacus, Fiur, Ignissa. Sản xuất bằng Veo3 và Seedance.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-status"><span class="badge"></span>Đang phát triển</div>
+        <div class="entry-body">
+          <h3>The Legend of Vaeloria: Rampart</h3>
+          <div class="entry-client">Vũ trụ Vaeloria — painterly</div>
+          <p>Series nhiều mùa lấy cảm hứng HoMM3, phong cách Arcane/Fortiche. Thế giới quan cho 9 phe phái, DNA cho 10+ nhân vật, shotlist trailer 9 cảnh.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-status"><span class="badge"></span>Đang sản xuất</div>
+        <div class="entry-body">
+          <h3>1K Challenge</h3>
+          <div class="entry-client">Khách hàng — FPT</div>
+          <p>Series quảng bá nhiều kịch bản, mỗi kịch bản một dàn nhân vật và giọng vùng miền riêng. Pipeline sản xuất đầy đủ qua Google Flow, Seedance, Veo3.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-status done"><span class="badge"></span>Hoàn thành</div>
+        <div class="entry-body">
+          <h3>Khu Phố Biết Thương</h3>
+          <div class="entry-client">Khách hàng — FPT</div>
+          <p>Phim ngắn thương hiệu bối cảnh đô thị Hà Nội, hệ thống nhân vật lớn, bản sắc hình ảnh đô thị miền Bắc hiện đại.</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-status"><span class="badge"></span>Đang phát hành</div>
+        <div class="entry-body">
+          <h3>Bà Lan Công Nghệ</h3>
+          <div class="entry-client">Series TikTok — cảnh giác lừa đảo công nghệ</div>
+          <p>Hoạt hình 3D phong cách Pixar, 5 nhân vật cố định, nội dung theo Arc. Arc 3 "AI Hơn AI", Arc 4 "Nỗi Oan Bé Tý".</p>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-status done"><span class="badge"></span>Hoàn thành</div>
+        <div class="entry-body">
+          <h3>Home &amp; Suất Chiếu Cuối Cùng</h3>
+          <div class="entry-client">Phim dự thi — VIETFILM AI LAB</div>
+          <p>Hai phim ngắn nghệ thuật: hoạt hình ấn tượng với visual bible và cấu trúc prompt 7 phần; và phim chiaroscuro phong cách Arcane về một người chiếu phim.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="msection">
+      <div class="mlabel">Ghi nhận</div>
+      <div class="rec-entry">
+        <div class="rlabel">Cuộc thi</div>
+        <div>
+          <h3>VIETFILM AI LAB</h3>
+          <p>Hai tác phẩm dự thi: Home và Suất Chiếu Cuối Cùng — mỗi phim đi qua toàn bộ quy trình tiền kỳ, world-building và sản xuất trailer.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="msection">
+      <div class="mlabel">Công cụ &amp; nền tảng</div>
+      <div class="tool-grid">
+        <span>Veo3</span><span>Seedance</span><span>Google Flow — Gemini Omni 1.1 Flash</span>
+        <span>After Effects</span><span>Envato Elements</span><span>Suno</span><span>ElevenLabs</span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>

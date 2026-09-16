@@ -29,8 +29,6 @@
   ::selection{ background:var(--amber); color:var(--ink); }
 
   .reel{ max-width:1040px; margin:0 auto; padding-left:56px; position:relative; }
-  .reel::before{ content:""; position:absolute; left:14px; top:0; bottom:0; width:1px; background:var(--rule); }
-  .sprocket{ position:absolute; left:10px; width:9px; height:9px; border:1px solid var(--rule); border-radius:1px; background:var(--ink); }
 
   header{ position:sticky; top:0; z-index:20; background:rgba(36,28,48,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--rule); transition:padding .25s ease; }
   .nav-inner{ max-width:1040px; margin:0 auto; padding:20px 56px; display:flex; justify-content:space-between; align-items:center; transition:padding .25s ease; }
@@ -47,10 +45,18 @@
     background-image:
       linear-gradient(180deg, rgba(36,28,48,0.2) 0%, rgba(36,28,48,0.58) 58%, var(--ink) 96%),
       radial-gradient(ellipse at 50% 22%, rgba(169,124,154,0.32), transparent 62%),
-      url('images/rampart-poster.png');
-    background-size:cover; background-position:center 18%;
+      url('images/hero-bg.png');
+    background-size:cover; background-position:center 22%;
   }
-  .hero-banner-content{ position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:flex-end; padding-bottom:100px; }
+  .hero-banner-content{ position:relative; z-index:2; height:100%; display:flex; flex-direction:row; align-items:flex-end; justify-content:space-between; gap:32px; padding-bottom:0; }
+  .hero-text-block{ flex:1 1 auto; padding-bottom:100px; }
+  .hero-portrait-fg{ flex:0 0 auto; height:100%; display:flex; align-items:flex-end; opacity:0; animation:hero-in .8s cubic-bezier(.2,.7,.3,1) forwards; animation-delay:1.5s; }
+  .hero-portrait-fg img{ height:min(80vh, 640px); width:auto; display:block; filter:drop-shadow(0 24px 44px rgba(0,0,0,0.55)); }
+  @media (prefers-reduced-motion: reduce){ .hero-portrait-fg{ opacity:1; animation:none; } }
+  @media (max-width:760px){
+    .hero-banner-content{ justify-content:flex-start; }
+    .hero-portrait-fg{ display:none; }
+  }
   .hero-kicker{ font-size:14px; letter-spacing:0.1em; color:var(--paper-dim); margin-bottom:14px; }
   .hero-name{ font-family:'Newsreader', serif; font-weight:600; font-size:clamp(56px, 9vw, 104px); line-height:0.94; letter-spacing:-0.02em; }
   .hero-role{ font-size:18px; color:var(--amber); margin-top:12px; }
@@ -107,6 +113,9 @@
   .award-body .org{ font-size:12.5px; color:var(--teal); margin-bottom:8px; }
   .award-body h3{ font-family:'Newsreader', serif; font-weight:500; font-size:24px; margin-bottom:10px; }
   .award-body p{ color:var(--paper-dim); font-size:15px; max-width:62ch; }
+  .award-gallery{ display:flex; flex-wrap:wrap; gap:16px; margin-top:24px; }
+  .award-gallery img{ height:280px; max-width:100%; object-fit:contain; border:1px solid var(--rule); }
+  @media (max-width:640px){ .award-gallery img{ height:auto; width:100%; } }
 
   .tools{ margin-top:40px; padding-top:36px; border-top:1px solid var(--rule); display:flex; flex-wrap:wrap; gap:10px; }
   .tools span{ font-size:13px; color:var(--paper); border:1px solid var(--rule); padding:7px 13px; }
@@ -139,12 +148,14 @@
   .med-name{ font-size:13px; color:var(--paper-dim); text-align:center; }
   .medallion.active .med-name{ color:var(--paper); }
 
-  .project-detail{ display:none; flex-direction:column; gap:26px; padding:36px 0 64px; border-top:1px solid var(--rule); }
+  .project-detail{ display:none; flex-direction:column; gap:26px; padding:36px 0 64px; border-top:1px solid var(--rule); position:relative; }
   .project-detail.active{ display:flex; animation:panel-in .4s ease; }
+  .project-detail > *{ position:relative; z-index:1; }
+  .project-bg{ position:absolute; inset:0; background-size:cover; background-position:center; opacity:0.1; filter:blur(1px); z-index:0; pointer-events:none; }
   @keyframes panel-in{ from{ opacity:0; transform:translateY(12px); } to{ opacity:1; transform:translateY(0); } }
 
   .proj-meta{ font-size:13px; color:var(--paper-dim); display:flex; gap:10px; align-items:center; }
-  .proj-poster{ position:relative; height:38vh; min-height:240px; border-radius:2px; overflow:hidden; display:flex; align-items:flex-end; padding:32px; }
+  .proj-poster{ position:relative; height:46vh; min-height:300px; border-radius:2px; overflow:hidden; display:flex; align-items:flex-end; padding:32px; }
   .poster-title{ font-family:'Newsreader', serif; font-size:clamp(28px, 4.2vw, 46px); line-height:1.05; }
   .poster-style{ display:block; margin-top:8px; font-size:13px; color:rgba(243,236,224,0.8); }
   .proj-intro{ max-width:64ch; color:var(--paper-dim); font-size:15.5px; }
@@ -173,14 +184,19 @@
   .video-embed video, .video-embed iframe{ width:100%; height:100%; object-fit:cover; display:block; border:0; }
   .proj-videos.portrait .video-embed{ aspect-ratio:9/16; }
   .proj-videos.portrait{ grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); }
-  .vcaption{ font-size:12px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+  .vcaption{ font-family:'Newsreader', serif; font-style:italic; font-size:16px; color:var(--paper); margin-top:10px; text-align:center; letter-spacing:0.01em; }
 
   .ep-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; }
   .ep-card{ display:block; aspect-ratio:9/16; border-radius:2px; overflow:hidden; border:1px solid var(--rule); }
   .ep-card img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
   .ep-card:hover img{ transform:scale(1.04); }
-  .tiktok-link, .social-link{ display:inline-flex; align-items:center; gap:8px; margin-top:16px; color:var(--paper); border-bottom:1px solid var(--accent, var(--amber)); padding-bottom:2px; font-size:14px; text-decoration:none; }
-  .tiktok-link:hover, .social-link:hover{ color:var(--accent, var(--amber)); }
+  .tiktok-link, .social-link{
+    display:inline-flex; align-items:center; gap:10px; margin-top:22px;
+    padding:13px 24px; border:1px solid var(--amber); color:var(--amber);
+    font-size:14px; font-weight:600; text-decoration:none; letter-spacing:0.02em;
+    transition:background .2s ease, color .2s ease;
+  }
+  .tiktok-link:hover, .social-link:hover{ background:var(--amber); color:var(--ink); }
 
   .ph-image-real{ aspect-ratio:4/3; border:1px solid var(--rule); overflow:hidden; background:#EDE6D8; display:flex; align-items:center; justify-content:center; }
   .ph-image-real img{ width:100%; height:100%; object-fit:contain; display:block; }
@@ -314,14 +330,16 @@
 <section class="hero-banner">
   <div class="hero-banner-bg"></div>
   <div class="hero-banner-content reel">
-    <div class="hero-kicker">Hành trình kể chuyện bằng AI</div>
-    <h1 class="hero-name">VIKTOR</h1>
-    <div class="hero-role">Đạo diễn hình ảnh · AI Video Creator</div>
+    <div class="hero-text-block">
+      <div class="hero-kicker">Hành trình kể chuyện bằng AI</div>
+      <h1 class="hero-name">VIKTOR</h1>
+      <div class="hero-role">Đạo diễn hình ảnh · AI Video Creator</div>
+    </div>
+    <div class="hero-portrait-fg"><img src="images/viktor-portrait-suit.png" alt="Viktor Tran"></div>
   </div>
   <svg class="hero-wave" viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,120 Q720,0 1440,120 L1440,120 L0,120 Z" fill="#241C30"></path></svg>
 </section>
 
-<div class="reel" id="reel-track"></div>
 
 <!-- 1. GIỚI THIỆU -->
 <section id="about" class="reel about-lead">
@@ -389,7 +407,7 @@
       <span class="med-name">Rampart</span>
     </button>
     <button class="medallion" data-target="proj-fpt">
-      <span class="med-wrap"><span class="med-ring med-ring-pattern"></span><span class="med-num">03</span></span>
+      <span class="med-wrap"><span class="med-ring"><img src="https://img.youtube.com/vi/dPARP5jvzKc/hqdefault.jpg" alt="1K Challenge"></span><span class="med-num">03</span></span>
       <span class="med-name">1K Challenge</span>
     </button>
     <button class="medallion" data-target="proj-khupho">
@@ -407,8 +425,9 @@
   </div>
 
   <div class="project-detail active theme-conflux" id="proj-conflux">
+    <div class="project-bg" style="background-image:url('images/conflux-bg.png');"></div>
     <div class="proj-meta">01 / 06 — Vũ trụ Vaeloria</div>
-    <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(30,23,40,0.05) 40%, rgba(30,23,40,0.9) 100%), url('images/conflux-poster.png'); background-size:cover; background-position:center 30%;">
+    <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(30,23,40,0.05) 40%, rgba(30,23,40,0.9) 100%), url('images/conflux-poster.png'); background-size:cover; background-position:center 8%;">
       <span class="ember" style="left:12%; bottom:8%; animation-duration:5.5s; animation-delay:0s;"></span>
       <span class="ember" style="left:28%; bottom:4%; animation-duration:6.5s; animation-delay:1.2s;"></span>
       <span class="ember" style="left:45%; bottom:12%; animation-duration:5s; animation-delay:2.4s;"></span>
@@ -451,6 +470,7 @@
   </div>
 
   <div class="project-detail theme-rampart" id="proj-rampart">
+    <div class="project-bg" style="background-image:url('images/rampart-bg.png');"></div>
     <div class="proj-meta">02 / 06 — Vũ trụ Vaeloria</div>
     <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(30,23,40,0.05) 40%, rgba(30,23,40,0.92) 100%), url('images/rampart-poster.png'); background-size:cover; background-position:center 25%;">
       <span class="ember" style="left:15%; bottom:10%; animation-duration:6.2s; animation-delay:0.3s;"></span>
@@ -497,7 +517,9 @@
 
   <div class="project-detail theme-fpt" id="proj-fpt">
     <div class="proj-meta">03 / 06 — FPT &amp; Thương hiệu</div>
-    <h3 class="poster-title" style="font-size:clamp(28px,4.2vw,46px);">FPT — 1K Challenge</h3>
+    <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(22,17,31,0.1) 35%, rgba(22,17,31,0.92) 100%), url('https://img.youtube.com/vi/dPARP5jvzKc/maxresdefault.jpg'); background-size:cover; background-position:center;">
+      <div><span class="poster-title">FPT — 1K Challenge</span><span class="poster-style">Series quảng bá — nhiều kịch bản, nhiều dàn nhân vật</span></div>
+    </div>
     <p class="proj-intro">Series quảng bá giúp FPT tiếp cận khách hàng một cách gần gũi hơn — thay vì quảng cáo trực diện, mỗi video đặt ra một tình huống đời thường xoay quanh số tiền 1.000 đồng, khơi gợi sự tò mò "1K mua được gì?". Phong cách dân dã, giọng vùng miền chân thực được chọn có chủ đích để xoá khoảng cách thương hiệu — khán giả thấy chính mình trong câu chuyện, không phải đang xem một quảng cáo công ty. Pipeline sản xuất đầy đủ với các quy tắc hình ảnh nghiêm ngặt (tờ tiền đúng màu nhưng làm mờ chi tiết, phục trang lặp lại xuyên suốt, quy tắc 180 độ) đảm bảo tính nhất quán qua sáu kịch bản.</p>
     <div class="proj-tags"><span>Google Flow</span><span>Seedance</span><span>Veo3</span><span>Excel tracking</span></div>
     <div>
@@ -524,8 +546,8 @@
     <div>
       <div class="proj-label">Video</div>
       <div class="proj-videos">
-        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/WsyLKGItfNs" title="Khu Phố Biết Thương — Bản chính thức" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Bản chính thức</div></div>
-        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/f2TB4xRSKHo" title="Khu Phố Biết Thương — Ver 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Bản dựng — Ver 3</div></div>
+        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/WsyLKGItfNs" title="TVC Khu Phố Biết Thương" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">TVC Khu Phố Biết Thương</div></div>
+        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/f2TB4xRSKHo" title="Tấm biển học nói" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Tấm biển học nói</div></div>
       </div>
     </div>
   </div>
@@ -547,8 +569,9 @@
   </div>
 
   <div class="project-detail theme-home" id="proj-home">
+    <div class="project-bg" style="background-image:url('images/home-bg.jpeg');"></div>
     <div class="proj-meta">06 / 06 — Phim cá nhân</div>
-    <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(23,17,31,0.1) 35%, rgba(23,17,31,0.92) 100%), url('images/home-poster.jpg'); background-size:cover; background-position:center 30%;">
+    <div class="proj-poster" style="background-image:linear-gradient(180deg, rgba(23,17,31,0.1) 35%, rgba(23,17,31,0.92) 100%), url('images/home-poster.jpg'); background-size:cover; background-position:center 8%;">
       <div><span class="poster-title">Home</span><span class="poster-style">Hoạt hình 3D phong cách hội họa ấn tượng — VIETFILM AI LAB</span></div>
     </div>
     <p class="proj-intro">Phim ngắn hoạt hình 3D theo phong cách hội họa ấn tượng, dự thi VIETFILM AI LAB. Được xây dựng với một visual bible trọn vẹn và cấu trúc prompt bảy phần cho từng shot, đảm bảo mạch hình ảnh nhất quán xuyên suốt phim.</p>
@@ -577,6 +600,10 @@
     <div class="org">VIETFILM AI LAB × CapCut</div>
     <h3>Top 16 Creator xuất sắc nhất</h3>
     <p>Được vinh danh trong Top 16 Creator xuất sắc nhất tại cuộc thi làm phim bằng AI do VIETFILM AI LAB phối hợp cùng CapCut tổ chức — trong khuôn khổ cuộc thi mà hai tác phẩm <em style="font-style:italic">Home</em> và <em style="font-style:italic">Suất Chiếu Cuối Cùng</em> tham gia dự thi.</p>
+    <div class="award-gallery">
+      <img src="images/award-top20.png" alt="Chúc mừng Top 20 AI Creator xuất sắc nhất — VIETFILM AI Talent 2026">
+      <img src="images/award-list16.png" alt="Danh sách 16 Giải Tiềm Năng — VIETFILM AI Talent 2026">
+    </div>
   </div>
 </div>
 
@@ -593,23 +620,6 @@
 </footer>
 
 <script>
-  // sprocket holes along the rail
-  const track = document.getElementById('reel-track');
-  const step = 46;
-  function buildSprockets(){
-    track.innerHTML = '';
-    const t = document.body.scrollHeight;
-    for(let y = 40; y < t; y += step){
-      const s = document.createElement('div');
-      s.className = 'sprocket';
-      s.style.top = y + 'px';
-      track.appendChild(s);
-    }
-  }
-  buildSprockets();
-  window.addEventListener('resize', buildSprockets);
-  window.addEventListener('load', buildSprockets);
-
   // film-leader countdown
   const leaderNum = document.getElementById('leaderNum');
   const counts = ['3','2','1'];

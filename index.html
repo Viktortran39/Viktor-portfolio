@@ -184,7 +184,8 @@
   .video-embed video, .video-embed iframe{ width:100%; height:100%; object-fit:cover; display:block; border:0; }
   .proj-videos.portrait .video-embed{ aspect-ratio:9/16; }
   .proj-videos.portrait{ grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); }
-  .vcaption{ font-family:'Newsreader', serif; font-style:italic; font-size:16px; color:var(--paper); margin-top:10px; text-align:center; letter-spacing:0.01em; }
+  .vcaption{ font-family:'Newsreader', serif; font-style:italic; font-size:18px; color:var(--paper); margin-top:16px; padding-top:14px; text-align:center; letter-spacing:0.015em; position:relative; }
+  .vcaption::before{ content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:28px; height:1px; background:var(--accent, var(--amber)); }
 
   .ep-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; }
   .ep-card{ display:block; aspect-ratio:9/16; border-radius:2px; overflow:hidden; border:1px solid var(--rule); }
@@ -443,9 +444,9 @@
     <div>
       <div class="proj-label">Video</div>
       <div class="proj-videos wide">
-        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/hD3ZV-r3nzQ" title="Conflux — Undertow" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Tập 1 · Undertow</div></div>
-        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/lunWBBgQxu8" title="Conflux — Unveiled" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Tập 4 · Unveiled</div></div>
-        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/CwL24ztg2eQ" title="Conflux — The Formula" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Tập 6 · The Formula</div></div>
+        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/hD3ZV-r3nzQ" title="Conflux — Undertow" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Undertow</div></div>
+        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/lunWBBgQxu8" title="Conflux — Unveiled" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Unveiled</div></div>
+        <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/CwL24ztg2eQ" title="Conflux — The Formula" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">The Formula</div></div>
       </div>
       <a class="social-link" href="https://www.instagram.com/viktor.ai.director/" target="_blank" rel="noopener">Xem thêm trên Instagram →</a>
     </div>
@@ -586,6 +587,21 @@
         <div><div class="video-embed"><iframe src="https://www.youtube.com/embed/3fHAW7FrtPc" title="Home — phim dự thi" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div><div class="vcaption">Home — phim dự thi</div></div>
       </div>
       <a class="social-link" href="https://www.instagram.com/viktor.tran_ai/" target="_blank" rel="noopener">Xem thêm trên Instagram →</a>
+    </div>
+    <div>
+      <div class="proj-label">Nhân vật</div>
+      <div class="character-row">
+        <div class="character-card">
+          <div class="character-photo"><img src="images/home-char-bin.png" alt="Bin"></div>
+          <h4>Bin</h4>
+          <p>Một chú mèo nhỏ vừa mất đi mạng sống, lạc bước vào Sân Ga của những linh hồn thú cưng. Không thể phát ra tiếng kêu, cậu chỉ có một khao khát duy nhất: tìm đường trở về nhà.</p>
+        </div>
+        <div class="character-card">
+          <div class="character-photo"><img src="images/home-char-pu.png" alt="Pu"></div>
+          <h4>Pu</h4>
+          <p>Chú vẹt nhỏ tinh nghịch, từng là vẹt cảnh nay lạc lối giữa Sân Ga. Nói nhiều, ồn ào, nhưng lại là người bạn duy nhất chịu ở lại bên Bin trên hành trình đầy hiểm nguy.</p>
+        </div>
+      </div>
     </div>
   </div>
 
